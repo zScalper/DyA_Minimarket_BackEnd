@@ -1,6 +1,7 @@
 package com.dyaminimarket.service;
 
 import com.dyaminimarket.dao.EstadoRepository;
+import com.dyaminimarket.dto.EstadoDTO;
 import com.dyaminimarket.models.Estado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,4 +26,13 @@ public class EstadoService {
     public Estado saveEstado(Estado estado) {
         return estadoRepository.save(estado);
     }
+
+    public EstadoDTO convertToDTO(Estado estado) {
+        EstadoDTO dto = new EstadoDTO();
+        dto.setId(estado.getId());
+        dto.setEstado(estado.getEstado());
+        dto.setDetalleEstado(estado.getDetalleEstado());
+        return dto;
+    }
+
 }

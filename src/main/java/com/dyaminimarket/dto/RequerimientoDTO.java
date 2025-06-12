@@ -12,3 +12,12 @@ public class RequerimientoDTO {
     private Integer codCotizacion;
     private Integer codUsuarioId;
 }
+// mas adelante implementar asi:
+//@Data
+//public class RequerimientoDTO {
+//    private LocalDate fecha;
+//    private Integer codDetalleRequerimiento;
+//    private EstadoDTO codEstado;
+//    private CotizacionDTO  codCotizacion;
+//    private UsuarioDTO  codUsuario;
+//}

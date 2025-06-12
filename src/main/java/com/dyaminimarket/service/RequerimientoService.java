@@ -1,6 +1,7 @@
 package com.dyaminimarket.service;
 
 import com.dyaminimarket.dao.RequerimientoRepository;
+import com.dyaminimarket.dto.RequerimientoDTO;
 import com.dyaminimarket.models.Estado;
 import com.dyaminimarket.models.Requerimiento;
 import com.dyaminimarket.models.Usuario;
@@ -33,6 +34,17 @@ public class RequerimientoService {
 
   public void deleteRequerimientoById(Integer id){
       requerimientoRepository.deleteById(id);
+  }
+
+ // Conversion a DTO
+  public RequerimientoDTO convertToDTO(Requerimiento requerimiento){
+    RequerimientoDTO dto = new RequerimientoDTO();
+    dto.setFecha(requerimiento.getFecha());
+    dto.setCodDetalleRequerimiento(requerimiento.getCodDetalleRequerimiento());
+    dto.setCodCotizacion(requerimiento.getCodCotizacion());
+      dto.setCodEstadoId(requerimiento.getCodEstado() != null ? requerimiento.getCodEstado().getId() : null);
+      dto.setCodUsuarioId(requerimiento.getCodUsuario() != null ? requerimiento.getCodUsuario().getId() : null);
+      return dto;
   }
 
 

@@ -16,9 +16,12 @@ public class SecurityConfig {
 	    http.csrf(csrf -> csrf.disable())
 	        .authorizeHttpRequests(auth -> auth
 	            .requestMatchers("/auth/login").permitAll()
-					.requestMatchers("/requerimientos/**").permitAll()  // <- AÑADE ESTA LÍNEA
+					.requestMatchers("/requerimientos/**").permitAll()
 					.requestMatchers("/estados/**").permitAll()
 					.requestMatchers("/usuarios/**").permitAll()
+					.requestMatchers("/categorias/**").permitAll()
+					.requestMatchers("/roles/**").permitAll()
+					.requestMatchers("/monedas/**").permitAll()
 	            .requestMatchers("/usuarios/**").authenticated()
 
 	        )
