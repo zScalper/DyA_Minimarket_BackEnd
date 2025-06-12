@@ -17,7 +17,10 @@ public class SecurityConfig {
 	        .authorizeHttpRequests(auth -> auth
 	            .requestMatchers("/auth/login").permitAll()
 					.requestMatchers("/requerimientos/**").permitAll()  // <- AÑADE ESTA LÍNEA
+					.requestMatchers("/estados/**").permitAll()
+					.requestMatchers("/usuarios/**").permitAll()
 	            .requestMatchers("/usuarios/**").authenticated()
+
 	        )
 	        .addFilterBefore(new JwtFilter(new JwtUtil()), org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
 

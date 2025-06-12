@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -18,6 +19,12 @@ public class UsuarioService {
 
     public Usuario saveUsuario(Usuario usuario) {
         return usuarioRepository.save(usuario);
+    }
+
+
+    //metodo para el DTO
+    public Optional<Usuario> getById(int id) {
+        return usuarioRepository.findById(id);
     }
 }
 
