@@ -48,7 +48,8 @@ public class EstadoController {
         EstadoDTO updatedEstado = estadoService.updateEstadoDTO(id, estadoDTO);
         return ResponseEntity.ok(updatedEstado);
     }
-    // Elimina un estado
+
+    // Elimina un estado y devuelve DTO
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEstado(@PathVariable Integer id) {
         if (!estadoService.getEstadoById(id).isPresent()) {
