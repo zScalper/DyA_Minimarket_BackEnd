@@ -1,4 +1,9 @@
 package com.dyaminimarket.dao;
 
-public interface RequerimientoRepository {
+import com.dyaminimarket.models.Requerimiento;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface RequerimientoRepository extends JpaRepository<Requerimiento, Integer> {
+
+
 }
