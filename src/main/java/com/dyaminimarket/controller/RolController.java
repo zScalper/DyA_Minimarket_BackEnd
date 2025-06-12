@@ -18,25 +18,46 @@ public class RolController {
     @Autowired
     private RolService rolService;
 
+    //  Obtener todos los roles en formato DTO
     @GetMapping
     public ResponseEntity<List<RolDTO>> getRoles() {
-        List<RolDTO> rolesDTO = rolService.getRoles()
-                .stream()
-                .map(rolService::convertToDTO)
-                .collect(Collectors.toList());
+        List<RolDTO> rolesDTO = rolService.getRolesDTO();
         return ResponseEntity.ok(rolesDTO);
     }
 
+    //  Obtener un rol por ID en formato DTO
     @GetMapping("/{id}")
     public ResponseEntity<RolDTO> getRolById(@PathVariable Integer id) {
-        Optional<Rol> rol = rolService.getRolById(id);
-        return rol.map(r -> ResponseEntity.ok(rolService.convertToDTO(r)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        Optional<RolDTO> rolDTO = rolService.getRolById(id);
+        return rolDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    //  Crear un nuevo rol y devolver DTO
     @PostMapping
-    public ResponseEntity<RolDTO> createRol(@RequestBody Rol rol) {
-        Rol savedRol = rolService.saveRol(rol);
-        return ResponseEntity.ok(rolService.convertToDTO(savedRol));
+    public ResponseEntity<RolDTO> createRol(@RequestBody RolDTO rolDTO) {
+        RolDTO savedRol = rolService.saveRolDTO(rolDTO);
+        return ResponseEntity.ok(savedRol);
     }
+
+    //  Actualizar un rol y devolver DTO
+    @PutMapping("/{id}")
+    public ResponseEntity<RolDTO> updateRol(@PathVariable Integer id, @RequestBody RolDTO rolDTO) {
+        if (!rolService.getRolById(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        RolDTO updatedRol = rolService.updateRolDTO(id, rolDTO);
+        return ResponseEntity.ok(updatedRol);
+    }
+
+    //  Eliminar un rol
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRol(@PathVariable Integer id) {
+        if (!rolService.getRolById(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        rolService.deleteRol(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }
