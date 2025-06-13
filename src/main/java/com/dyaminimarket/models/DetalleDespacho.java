@@ -13,6 +13,7 @@ public class DetalleDespacho {
     @Column(name = "id_detalle_despacho", nullable = false)
     private Integer id;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cod_producto")
     private Producto codProducto;

@@ -1,15 +1,12 @@
 package com.dyaminimarket.controller;
 
 import com.dyaminimarket.dto.UsuarioDTO;
-import com.dyaminimarket.models.Usuario;
 import com.dyaminimarket.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/usuarios")
