@@ -25,7 +25,7 @@ public class RequerimientoController {
     public ResponseEntity<List<Requerimiento>> getRequerimientos(){
         return  ResponseEntity.ok(requerimientoService.getRequerimientos());
     }
-
+/*
     // Obtendremos un Requerimiento por ID
     @GetMapping("/{id}")
     public ResponseEntity<RequerimientoDTO> getRequerimientoById(@PathVariable Integer id) {
@@ -62,5 +62,5 @@ public class RequerimientoController {
         }
         requerimientoService.deleteRequerimientoById(id);
         return ResponseEntity.noContent().build();
-    }
+    }*/
 }

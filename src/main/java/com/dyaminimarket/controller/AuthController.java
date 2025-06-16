@@ -6,6 +6,7 @@ import com.dyaminimarket.dto.LoginRequest;
 import com.dyaminimarket.models.Usuario;
 import com.dyaminimarket.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -18,13 +19,17 @@ public class AuthController {
 
     @Autowired
     private JwtUtil jwtUtil;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder; // Inyectamos BCryptPasswordEncoder
 
     @PostMapping("/login")
     public JwtResponse login(@RequestBody LoginRequest request) {
-        Optional<Usuario> usuario = usuarioRepository.findByEmail(request.getEmail());
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(request.getEmail());
 
-        if (usuario.isPresent() && usuario.get().getPassword().equals(request.getPassword())) {
-            String token = jwtUtil.generateToken(request.getEmail()); // Generar token con email
+        if (usuarioOpt.isPresent() && passwordEncoder.matches(request.getPassword(), usuarioOpt.get().getPassword())) {
+            Usuario usuario = usuarioOpt.get(); // Obtén el objeto completo
+            String token = jwtUtil.generateToken(usuario); // ✅ Ahora se pasa un `Usuario`
             return new JwtResponse(token);
         } else {
             throw new RuntimeException("Credenciales incorrectas.");
@@ -36,7 +41,7 @@ public class AuthController {
         Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
 
         if (usuario.isPresent()) {
-            usuario.get().setPassword(newPassword); // Actualiza la contraseña
+            usuario.get().setPassword(passwordEncoder.encode(newPassword)); // Encriptar antes de guardar
             usuarioRepository.save(usuario.get());
             return "Contraseña actualizada correctamente.";
         } else {

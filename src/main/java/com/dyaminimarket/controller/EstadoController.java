@@ -1,7 +1,6 @@
 package com.dyaminimarket.controller;
 
 import com.dyaminimarket.dto.EstadoDTO;
-import com.dyaminimarket.models.Estado;
 import com.dyaminimarket.service.EstadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/estados")

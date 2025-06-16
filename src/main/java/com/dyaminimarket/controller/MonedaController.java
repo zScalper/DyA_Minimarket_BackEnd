@@ -1,7 +1,6 @@
 package com.dyaminimarket.controller;
 
 import com.dyaminimarket.dto.MonedaDTO;
-import com.dyaminimarket.models.Moneda;
 import com.dyaminimarket.service.MonedaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

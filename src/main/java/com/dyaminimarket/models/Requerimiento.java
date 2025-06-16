@@ -18,19 +18,69 @@ public class Requerimiento {
 
     @Column(name = "fecha")
     private LocalDate fecha;
-
-    @Column(name = "cod_detalle_requerimiento")
-    private Integer codDetalleRequerimiento;
+    
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cod_detalle_requerimiento")
+    private DetalleRequerimiento codDetalleRequerimiento;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cod_estado")
     private Estado codEstado;
-
-    @Column(name = "cod_cotizacion")
-    private Integer codCotizacion;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cod_cotizacion")
+    private Cotizacion codCotizacion;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cod_usuario")
     private Usuario codUsuario;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public LocalDate getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(LocalDate fecha) {
+		this.fecha = fecha;
+	}
+
+	public DetalleRequerimiento getCodDetalleRequerimiento() {
+		return codDetalleRequerimiento;
+	}
+
+	public void setCodDetalleRequerimiento(DetalleRequerimiento codDetalleRequerimiento) {
+		this.codDetalleRequerimiento = codDetalleRequerimiento;
+	}
+
+	public Estado getCodEstado() {
+		return codEstado;
+	}
+
+	public void setCodEstado(Estado codEstado) {
+		this.codEstado = codEstado;
+	}
+
+	public Cotizacion getCodCotizacion() {
+		return codCotizacion;
+	}
+
+	public void setCodCotizacion(Cotizacion codCotizacion) {
+		this.codCotizacion = codCotizacion;
+	}
+
+	public Usuario getCodUsuario() {
+		return codUsuario;
+	}
+
+	public void setCodUsuario(Usuario codUsuario) {
+		this.codUsuario = codUsuario;
+	}
 
 }

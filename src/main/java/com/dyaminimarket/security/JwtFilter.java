@@ -1,57 +1,58 @@
 package com.dyaminimarket.security;
 
-import com.dyaminimarket.dao.UsuarioRepository;
-import com.dyaminimarket.models.Usuario;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
+
+@Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final JwtUtil jwtUtil;
-    private final UsuarioRepository usuarioRepository;
-
-    public JwtFilter(JwtUtil jwtUtil, UsuarioRepository usuarioRepository) {
-        this.jwtUtil = jwtUtil;
-        this.usuarioRepository = usuarioRepository;
-    }
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain chain)
             throws ServletException, IOException {
 
-        String authorizationHeader = request.getHeader("Authorization");
-
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String token = authorizationHeader.substring(7);
+        String authHeader = request.getHeader("Authorization");
+        System.out.println("➡️ Entrando a JwtFilter");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
             String email = jwtUtil.extractEmail(token);
 
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
+                // Extraer el rol directamente desde el token
+            	System.out.println("🔐 Token recibido: " + token);
+            	String rol = jwtUtil.extractRol(token);
 
-                if (usuario != null) {
-                    List<GrantedAuthority> authorities = Collections.singletonList(
-                            new SimpleGrantedAuthority(usuario.getRol().getNombre()) // 🔥 Obtener nombre del rol correctamente
-                    );
+                // Bonus: imprimir el rol para verificar que se lea correctamente
+                System.out.println("ROL desde token JWT: " + rol);
 
-                    User user = new User(email, "", authorities);
+                List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(rol));
+                User userDetails = new User(email, "", authorities);
 
-                    SecurityContextHolder.getContext().setAuthentication(
-                            new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(user, null, user.getAuthorities())
-                    );
-                }
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+                SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
 
         chain.doFilter(request, response);
     }
 }
+

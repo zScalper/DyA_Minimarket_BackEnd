@@ -1,9 +1,6 @@
 package com.dyaminimarket.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "usuario")
@@ -11,7 +8,6 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")
-
 
     private Integer id;
 
@@ -23,9 +19,6 @@ public class Usuario {
 
     @Column(length = 20)
     private String telefono;
-
-//    @Column(length = 150)
-//    private String direccion;
 
     @Column(nullable = false, length = 100, unique = true)
     private String email;
@@ -41,7 +34,7 @@ public class Usuario {
     private Rol rol;
 
     public String getPassword() {
-        return password != null ? password : "Dya" + dni; // Usa la contraseña temporal si no hay una nueva
+        return password;
     }
 
     public void setPassword(String password) {
@@ -79,14 +72,6 @@ public class Usuario {
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
-
-//	public String getDireccion() {
-//		return direccion;
-//	}
-//
-//	public void setDireccion(String direccion) {
-//		this.direccion = direccion;
-//	}
 
 	public String getEmail() {
 		return email;

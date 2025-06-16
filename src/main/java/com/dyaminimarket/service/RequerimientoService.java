@@ -37,15 +37,16 @@ public class RequerimientoService {
   }
 
  // Conversion a DTO
+  /*
   public RequerimientoDTO convertToDTO(Requerimiento requerimiento){
     RequerimientoDTO dto = new RequerimientoDTO();
     dto.setFecha(requerimiento.getFecha());
     dto.setCodDetalleRequerimiento(requerimiento.getCodDetalleRequerimiento());
     dto.setCodCotizacion(requerimiento.getCodCotizacion());
-      dto.setCodEstadoId(requerimiento.getCodEstado() != null ? requerimiento.getCodEstado().getId() : null);
-      dto.setCodUsuarioId(requerimiento.getCodUsuario() != null ? requerimiento.getCodUsuario().getId() : null);
+      dto.setCodEstado(requerimiento.getCodEstado() != null ? requerimiento.getCodEstado().getId() : null);
+      dto.setCodUsuario(requerimiento.getCodUsuario() != null ? requerimiento.getCodUsuario().getId() : null);
       return dto;
-  }
+  }*/
 
 
 

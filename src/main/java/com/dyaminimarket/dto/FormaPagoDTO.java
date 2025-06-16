@@ -1,11 +1,10 @@
 package com.dyaminimarket.dto;
-
 import lombok.Data;
 
 @Data
-public class MonedaDTO {
-    private Integer id;
-    private String nombre;
+public class FormaPagoDTO {
+	private Integer id;
+    private String formaPago;
     private String detalle;
 	public Integer getId() {
 		return id;
@@ -13,11 +12,11 @@ public class MonedaDTO {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public String getNombre() {
-		return nombre;
+	public String getFormaPago() {
+		return formaPago;
 	}
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setFormaPago(String formaPago) {
+		this.formaPago = formaPago;
 	}
 	public String getDetalle() {
 		return detalle;
@@ -25,5 +24,4 @@ public class MonedaDTO {
 	public void setDetalle(String detalle) {
 		this.detalle = detalle;
 	}
-    
 }

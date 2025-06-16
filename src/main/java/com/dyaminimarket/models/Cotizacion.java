@@ -37,4 +37,60 @@ public class Cotizacion {
     @JoinColumn(name = "cod_forma_pago")
     private FormaPago codFormaPago;
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Requerimiento getCodRequerimiento() {
+		return codRequerimiento;
+	}
+
+	public void setCodRequerimiento(Requerimiento codRequerimiento) {
+		this.codRequerimiento = codRequerimiento;
+	}
+
+	public LocalDate getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(LocalDate fecha) {
+		this.fecha = fecha;
+	}
+
+	public Estado getCodEstado() {
+		return codEstado;
+	}
+
+	public void setCodEstado(Estado codEstado) {
+		this.codEstado = codEstado;
+	}
+
+	public LocalDate getFechaVencimiento() {
+		return fechaVencimiento;
+	}
+
+	public void setFechaVencimiento(LocalDate fechaVencimiento) {
+		this.fechaVencimiento = fechaVencimiento;
+	}
+
+	public Moneda getCodMoneda() {
+		return codMoneda;
+	}
+
+	public void setCodMoneda(Moneda codMoneda) {
+		this.codMoneda = codMoneda;
+	}
+
+	public FormaPago getCodFormaPago() {
+		return codFormaPago;
+	}
+
+	public void setCodFormaPago(FormaPago codFormaPago) {
+		this.codFormaPago = codFormaPago;
+	}
+
 }

@@ -5,11 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
+
 @Entity
 @Table(name = "estado")
 public class Estado {
@@ -24,5 +21,29 @@ public class Estado {
     @Size(max = 100)
     @Column(name = "detalle_estado", length = 100)
     private String detalleEstado;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public String getDetalleEstado() {
+		return detalleEstado;
+	}
+
+	public void setDetalleEstado(String detalleEstado) {
+		this.detalleEstado = detalleEstado;
+	}
 
 }

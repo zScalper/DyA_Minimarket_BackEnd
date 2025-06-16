@@ -1,47 +1,70 @@
 package com.dyaminimarket.security;
 
-import com.dyaminimarket.dao.UsuarioRepository;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-	@Bean
-	SecurityFilterChain securityFilterChain(HttpSecurity http, UsuarioRepository usuarioRepository) throws Exception {
-		http.csrf(csrf -> csrf.disable())
-				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/auth/login").permitAll()
-						.requestMatchers("/usuarios/register").permitAll()
-//						.requestMatchers(HttpMethod.PUT, "/usuarios/{id}").hasRole("ADMIN")
-						.requestMatchers("/usuarios/**").authenticated()
-				)
-				.addFilterBefore(new JwtFilter(new JwtUtil(), usuarioRepository),
-						org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
 
-		return http.build();
-	}
-	
+	@Autowired
+    private JwtFilter jwtFilter; // Inyectamos correctamente el filtro JWT
+
 	@Bean
-    WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:4200")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE")
-                        .allowedHeaders("*");
-            }
-        };
+	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	    http
+	        .cors(Customizer.withDefaults()) // habilita CORS a nivel de seguridad
+	        .csrf(csrf -> csrf.disable())
+	        .authorizeHttpRequests(auth -> auth
+	        	    .requestMatchers("/auth/login").permitAll()
+	        	    .requestMatchers("/estados").permitAll()
+	        	    .requestMatchers("/monedas").permitAll()
+	        	    // Acceso granular según método y autoridad
+	        	    .requestMatchers(HttpMethod.GET, "/usuarios/**").hasAnyAuthority("ADMINISTRADOR", "LOGISTICA")
+	        	    .requestMatchers(HttpMethod.POST, "/usuarios").hasAuthority("ADMINISTRADOR")
+	        	    .requestMatchers(HttpMethod.PUT, "/usuarios/**").hasAuthority("ADMINISTRADOR")
+	        	    .requestMatchers(HttpMethod.DELETE, "/usuarios/**").hasAuthority("ADMINISTRADOR")
+
+	        	    // Cualquier otro endpoint protegido
+	        	    .anyRequest().authenticated()
+	        	)
+	        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
+	    return http.build();
+	}
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+        
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
+
+	@Bean
+	PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 }
-
-
-
