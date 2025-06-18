@@ -35,6 +35,7 @@ public class SecurityConfig {
 	        	    .requestMatchers("/auth/login").permitAll()
 	        	    .requestMatchers("/estados").permitAll()
 	        	    .requestMatchers("/monedas").permitAll()
+	        	    .requestMatchers("/roles").permitAll()
 	        	    .requestMatchers("/formas-pago/**").permitAll()
 	        	    .requestMatchers("/tipo-proveedor/**").permitAll()
 	        	    .requestMatchers("/proveedores/**").permitAll()

@@ -35,7 +35,7 @@ public class DetalleCotizacion {
 
 	    @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "cod_moneda", nullable = false)
-	    private Moneda cod_Moneda;
+	    private Moneda cod_Moneda; 
 
 	   
 

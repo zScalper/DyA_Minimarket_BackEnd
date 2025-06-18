@@ -5,6 +5,7 @@ import com.dyaminimarket.dao.DetalleCotizacionRepository;
 import com.dyaminimarket.dao.EstadoRepository;
 import com.dyaminimarket.dao.RequerimientoRepository;
 import com.dyaminimarket.dto.CotizacionDTO;
+import com.dyaminimarket.dto.DetalleCotizacionDTO;
 import com.dyaminimarket.models.Cotizacion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 public class CotizacionService {
 
 	
-	 @Autowired private CotizacionRepository repository;
+	   @Autowired private CotizacionRepository repository;
 	    @Autowired private RequerimientoRepository requerimientoRepository;
 	    @Autowired private EstadoRepository estadoRepository;
 	    @Autowired private DetalleCotizacionRepository detalleRepository;
@@ -55,8 +56,16 @@ public class CotizacionService {
 	        if (dto.getCodEstado() != null)
 	            cot.setCodEstado(estadoRepository.findById(dto.getCodEstado().getId()).orElse(null));
 
-	        if (dto.getDetalleCotizacion() != null)
-	            cot.setCodDetalleCotizacion(detalleRepository.findById(dto.getDetalleCotizacion().getIdDetalleCotizacion()).orElse(null));
+	        if (dto.getDetalleCotizacion() != null) {
+	            Integer idDet = dto.getDetalleCotizacion().getIdDetalleCotizacion();
+	            if (idDet != null) {
+	                cot.setCodDetalleCotizacion(detalleRepository.findById(idDet).orElse(null));
+	            } else {
+	                // Guardar el detalle primero si es nuevo (sin ID)
+	                DetalleCotizacionDTO savedDetalle = detalleService.saveDTO(dto.getDetalleCotizacion());
+	                cot.setCodDetalleCotizacion(detalleRepository.findById(savedDetalle.getIdDetalleCotizacion()).orElse(null));
+	            }
+	        }
 
 	        return convertToDTO(repository.save(cot));
 	    }
@@ -95,8 +104,16 @@ public class CotizacionService {
 	        if (dto.getCodEstado() != null)
 	            cot.setCodEstado(estadoRepository.findById(dto.getCodEstado().getId()).orElse(null));
 
-	        if (dto.getDetalleCotizacion() != null)
-	            cot.setCodDetalleCotizacion(detalleRepository.findById(dto.getDetalleCotizacion().getIdDetalleCotizacion()).orElse(null));
+	        if (dto.getDetalleCotizacion() != null) {
+	            Integer idDet = dto.getDetalleCotizacion().getIdDetalleCotizacion();
+	            if (idDet != null) {
+	                cot.setCodDetalleCotizacion(detalleRepository.findById(idDet).orElse(null));
+	            } else {
+	                // Guardar el detalle primero si es nuevo (sin ID)
+	                DetalleCotizacionDTO savedDetalle = detalleService.saveDTO(dto.getDetalleCotizacion());
+	                cot.setCodDetalleCotizacion(detalleRepository.findById(savedDetalle.getIdDetalleCotizacion()).orElse(null));
+	            }
+	        }
 
 	        return cot;
 	    }

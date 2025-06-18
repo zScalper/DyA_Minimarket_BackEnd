@@ -5,7 +5,9 @@ import com.dyaminimarket.dao.DetalleRequerimientoRepository;
 import com.dyaminimarket.dao.EstadoRepository;
 import com.dyaminimarket.dao.RequerimientoRepository;
 import com.dyaminimarket.dao.UsuarioRepository;
+import com.dyaminimarket.dto.DetalleRequerimientoDTO;
 import com.dyaminimarket.dto.RequerimientoDTO;
+import com.dyaminimarket.models.DetalleRequerimiento;
 import com.dyaminimarket.models.Estado;
 import com.dyaminimarket.models.Requerimiento;
 import com.dyaminimarket.models.Usuario;
@@ -19,87 +21,102 @@ import java.util.stream.Collectors;
 @Service
 public class RequerimientoService {
 
+	   @Autowired private RequerimientoRepository repository;
+	    @Autowired private EstadoRepository estadoRepository;
+	    @Autowired private UsuarioRepository usuarioRepository;
 
+	    @Autowired private DetalleRequerimientoService detalleService;
+	    @Autowired private EstadoService estadoService;
+	    @Autowired private UsuarioService usuarioService;
+	    
+	    public List<RequerimientoDTO> getAllDTO() {
+	        return repository.findAll().stream()
+	                .map(this::convertToDTO)
+	                .collect(Collectors.toList());
+	    }
 
-    @Autowired private RequerimientoRepository repository;
-    @Autowired private DetalleRequerimientoRepository detalleRepository;
-    @Autowired private EstadoRepository estadoRepository;
-    @Autowired private UsuarioRepository usuarioRepository;
+	    public Optional<RequerimientoDTO> getRequerimientoById(Integer id) {
+	        return repository.findById(id).map(this::convertToDTO);
+	    }
 
-    @Autowired private DetalleRequerimientoService detalleService;
-    @Autowired private EstadoService estadoService;
-    @Autowired private UsuarioService usuarioService;
+	    public RequerimientoDTO saveDTO(RequerimientoDTO dto) {
+	        Requerimiento entity = convertToEntity(dto);
+	        entity.getDetalles().forEach(d -> d.setRequerimiento(entity));
+	        return convertToDTO(repository.save(entity));
+	    }
 
-    public List<RequerimientoDTO> getAllDTO() {
-        return repository.findAll().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
+	    public RequerimientoDTO updateDTO(Integer id, RequerimientoDTO dto) {
+	        Optional<Requerimiento> existing = repository.findById(id);
+	        if (!existing.isPresent()) return null;
 
-    public Optional<RequerimientoDTO> getRequerimientoById(Integer id) {
-        return repository.findById(id).map(this::convertToDTO);
-    }
+	        Requerimiento entity = existing.get();
+	        entity.setFecha(dto.getFecha());
 
-    public RequerimientoDTO saveDTO(RequerimientoDTO dto) {
-        Requerimiento entity = convertToEntity(dto);
-        return convertToDTO(repository.save(entity));
-    }
+	        if (dto.getCodEstado() != null)
+	            entity.setCodEstado(estadoRepository.findById(dto.getCodEstado().getId()).orElse(null));
 
-    public RequerimientoDTO updateDTO(Integer id, RequerimientoDTO dto) {
-        Optional<Requerimiento> existing = repository.findById(id);
-        if (!existing.isPresent()) return null;
+	        if (dto.getCodUsuario() != null)
+	            entity.setCodUsuario(usuarioRepository.findById(dto.getCodUsuario().getId()).orElse(null));
 
-        Requerimiento req = existing.get();
-        req.setFecha(dto.getFecha());
+	        // Eliminar los detalles antiguos
+	        entity.getDetalles().clear();
 
-        if (dto.getCodDetalleRequerimiento() != null)
-            req.setCodDetalleRequerimiento(detalleRepository.findById(dto.getCodDetalleRequerimiento().getId()).orElse(null));
+	        // Agregar los nuevos
+	        if (dto.getDetalles() != null) {
+	            for (DetalleRequerimientoDTO detalleDTO : dto.getDetalles()) {
+	                DetalleRequerimiento detalle = detalleService.convertToEntity(detalleDTO);
+	                detalle.setRequerimiento(entity);
+	                entity.getDetalles().add(detalle);
+	            }
+	        }
 
-        if (dto.getCodEstado() != null)
-            req.setCodEstado(estadoRepository.findById(dto.getCodEstado().getId()).orElse(null));
+	        return convertToDTO(repository.save(entity));
+	    }
 
-        if (dto.getCodUsuario() != null)
-            req.setCodUsuario(usuarioRepository.findById(dto.getCodUsuario().getId()).orElse(null));
+	    public void delete(Integer id) {
+	        repository.deleteById(id);
+	    }
 
-        return convertToDTO(repository.save(req));
-    }
+	    public RequerimientoDTO convertToDTO(Requerimiento entity) {
+	        RequerimientoDTO dto = new RequerimientoDTO();
+	        dto.setId(entity.getId());
+	        dto.setFecha(entity.getFecha());
 
-    public void delete(Integer id) {
-        repository.deleteById(id);
-    }
+	        if (entity.getCodEstado() != null)
+	            dto.setCodEstado(estadoService.getById(entity.getCodEstado().getId()).orElse(null));
 
-    private RequerimientoDTO convertToDTO(Requerimiento entity) {
-        RequerimientoDTO dto = new RequerimientoDTO();
-        dto.setId(entity.getId());
-        dto.setFecha(entity.getFecha());
+	        if (entity.getCodUsuario() != null)
+	            dto.setCodUsuario(usuarioService.getUsuarioById(entity.getCodUsuario().getId()).orElse(null));
 
-        if (entity.getCodDetalleRequerimiento() != null)
-            dto.setCodDetalleRequerimiento(detalleService.getById(entity.getCodDetalleRequerimiento().getId()).orElse(null));
+	        if (entity.getDetalles() != null)
+	            dto.setDetalles(entity.getDetalles().stream()
+	                    .map(detalleService::convertToDTO)
+	                    .collect(Collectors.toList()));
 
-        if (entity.getCodEstado() != null)
-            dto.setCodEstado(estadoService.getById(entity.getCodEstado().getId()).orElse(null));
+	        return dto;
+	    }
 
-        if (entity.getCodUsuario() != null)
-            dto.setCodUsuario(usuarioService.getUsuarioById(entity.getCodUsuario().getId()).orElse(null));
+	    public Requerimiento convertToEntity(RequerimientoDTO dto) {
+	        Requerimiento entity = new Requerimiento();
+	        entity.setId(dto.getId());
+	        entity.setFecha(dto.getFecha());
 
-        return dto;
-    }
+	        if (dto.getCodEstado() != null)
+	            entity.setCodEstado(estadoRepository.findById(dto.getCodEstado().getId()).orElse(null));
 
-    private Requerimiento convertToEntity(RequerimientoDTO dto) {
-        Requerimiento entity = new Requerimiento();
-        entity.setId(dto.getId());
-        entity.setFecha(dto.getFecha());
+	        if (dto.getCodUsuario() != null)
+	            entity.setCodUsuario(usuarioRepository.findById(dto.getCodUsuario().getId()).orElse(null));
 
-        if (dto.getCodDetalleRequerimiento() != null)
-            entity.setCodDetalleRequerimiento(detalleRepository.findById(dto.getCodDetalleRequerimiento().getId()).orElse(null));
+	        if (dto.getDetalles() != null) {
+	            List<DetalleRequerimiento> detalles = dto.getDetalles().stream()
+	                    .map(detalleService::convertToEntity)
+	                    .peek(d -> d.setRequerimiento(entity))
+	                    .collect(Collectors.toList());
+	            entity.setDetalles(detalles);
+	        }
 
-        if (dto.getCodEstado() != null)
-            entity.setCodEstado(estadoRepository.findById(dto.getCodEstado().getId()).orElse(null));
+	        return entity;
+	    }
 
-        if (dto.getCodUsuario() != null)
-            entity.setCodUsuario(usuarioRepository.findById(dto.getCodUsuario().getId()).orElse(null));
-
-        return entity;
-    } 
 
 }

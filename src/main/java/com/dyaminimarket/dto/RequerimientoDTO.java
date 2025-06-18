@@ -3,14 +3,17 @@ package com.dyaminimarket.dto;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class RequerimientoDTO {
-	private Integer id;//ya
-	private LocalDate fecha;//ya
-	private DetalleRequerimientoDTO codDetalleRequerimiento; // fañta
-	private EstadoDTO codEstado;// ya esta
-	private UsuarioDTO codUsuario; // ya esta
+	private Integer id;
+	private LocalDate fecha;
+	
+	private List<DetalleRequerimientoDTO> detalles;
+	private EstadoDTO codEstado;
+	private UsuarioDTO codUsuario;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -23,25 +26,27 @@ public class RequerimientoDTO {
 	public void setFecha(LocalDate fecha) {
 		this.fecha = fecha;
 	}
-	public DetalleRequerimientoDTO getCodDetalleRequerimiento() {
-		return codDetalleRequerimiento;
+	public List<DetalleRequerimientoDTO> getDetalles() {
+		return detalles;
 	}
-	public void setCodDetalleRequerimiento(DetalleRequerimientoDTO codDetalleRequerimiento) {
-		this.codDetalleRequerimiento = codDetalleRequerimiento;
+	public void setDetalles(List<DetalleRequerimientoDTO> detalles) {
+		this.detalles = detalles;
 	}
-	public EstadoDTO getCodEstado() { //ya esta
+	public EstadoDTO getCodEstado() {
 		return codEstado;
 	}
 	public void setCodEstado(EstadoDTO codEstado) {
-		this.codEstado = codEstado; // ya esta
+		this.codEstado = codEstado;
 	}
-	
-	
 	public UsuarioDTO getCodUsuario() {
 		return codUsuario;
 	}
 	public void setCodUsuario(UsuarioDTO codUsuario) {
 		this.codUsuario = codUsuario;
-	}
+	} 
+	
+	
+	
+	
 	
 }

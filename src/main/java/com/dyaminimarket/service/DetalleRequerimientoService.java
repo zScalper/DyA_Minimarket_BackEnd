@@ -11,66 +11,60 @@ import com.dyaminimarket.dao.DetalleRequerimientoRepository;
 import com.dyaminimarket.dao.ProductoRepository;
 import com.dyaminimarket.dto.DetalleRequerimientoDTO;
 import com.dyaminimarket.models.DetalleRequerimiento;
+import com.dyaminimarket.models.Producto;
 
 @Service
 public class DetalleRequerimientoService {
 
-	 @Autowired private DetalleRequerimientoRepository repository;
-	    @Autowired private ProductoRepository productoRepository;
-	    @Autowired private ProductoService productoService;
+	@Autowired
+    private ProductoRepository productoRepository;
+	@Autowired
+	private DetalleRequerimientoRepository detalleRepository;
 
-	    public List<DetalleRequerimientoDTO> getAllDTO() {
-	        return repository.findAll().stream()
-	                .map(this::convertToDTO)
-	                .collect(Collectors.toList());
-	    }
+    @Autowired
+    private ProductoService productoService;
 
-	    public Optional<DetalleRequerimientoDTO> getById(Integer id) {
-	        return repository.findById(id).map(this::convertToDTO);
-	    }
+    public DetalleRequerimientoDTO convertToDTO(DetalleRequerimiento entity) {
+        DetalleRequerimientoDTO dto = new DetalleRequerimientoDTO();
+        dto.setId(entity.getId());
+        dto.setCantidad(entity.getCantidad());
 
-	    public DetalleRequerimientoDTO saveDTO(DetalleRequerimientoDTO dto) {
-	        DetalleRequerimiento entity = convertToEntity(dto);
-	        return convertToDTO(repository.save(entity));
-	    }
+        if (entity.getCodProducto() != null) {
+            dto.setCodProducto(productoService.getProductoById(entity.getCodProducto().getId()).orElse(null));
+        }
 
-	    public DetalleRequerimientoDTO updateDTO(Integer id, DetalleRequerimientoDTO dto) {
-	        Optional<DetalleRequerimiento> optional = repository.findById(id);
-	        if (!optional.isPresent()) return null;
+        if (entity.getRequerimiento() != null) {
+            dto.setIdRequerimiento(entity.getRequerimiento().getId());
+        }
 
-	        DetalleRequerimiento existing = optional.get();
-	        existing.setCantidad(dto.getCantidad());
+        return dto;
+    }
 
-	        if (dto.getCodProducto() != null)
-	            existing.setCodProducto(productoRepository.findById(dto.getCodProducto().getId()).orElse(null));
+    public DetalleRequerimiento convertToEntity(DetalleRequerimientoDTO dto) {
+        DetalleRequerimiento entity = new DetalleRequerimiento();
+        entity.setId(dto.getId());
+        entity.setCantidad(dto.getCantidad());
 
-	        return convertToDTO(repository.save(existing));
-	    }
+        if (dto.getCodProducto() != null) {
+            Optional<Producto> producto = productoRepository.findById(dto.getCodProducto().getId());
+            producto.ifPresent(entity::setCodProducto);
+        }
 
-	    public void delete(Integer id) {
-	        repository.deleteById(id);
-	    }
+        // Requerimiento se inyecta desde RequerimientoService
+        return entity;
+    }
+    
+    public List<DetalleRequerimientoDTO> getAllDTO() {
+        return detalleRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
 
-	    private DetalleRequerimientoDTO convertToDTO(DetalleRequerimiento entity) {
-	        DetalleRequerimientoDTO dto = new DetalleRequerimientoDTO();
-	        dto.setId(entity.getId());
-	        dto.setCantidad(entity.getCantidad());
-
-	        if (entity.getCodProducto() != null)
-	            dto.setCodProducto(productoService.getProductoById(entity.getCodProducto().getId()).orElse(null));
-
-	        return dto;
-	    }
-
-	    private DetalleRequerimiento convertToEntity(DetalleRequerimientoDTO dto) {
-	        DetalleRequerimiento entity = new DetalleRequerimiento();
-	        entity.setId(dto.getId());
-	        entity.setCantidad(dto.getCantidad());
-
-	        if (dto.getCodProducto() != null)
-	            entity.setCodProducto(productoRepository.findById(dto.getCodProducto().getId()).orElse(null));
-
-	        return entity;
-	    }
+    public Optional<DetalleRequerimientoDTO> getById(Integer id) {
+        return detalleRepository.findById(id).map(this::convertToDTO);
+    }
+    
+    
+    
 	
 }

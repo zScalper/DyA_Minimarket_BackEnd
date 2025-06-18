@@ -17,7 +17,7 @@ import java.util.Optional;
 @RequestMapping("/requerimientos")
 public class RequerimientoController {
 
-	   @Autowired
+	 @Autowired
 	    private RequerimientoService service;
 
 	    @GetMapping
@@ -28,13 +28,12 @@ public class RequerimientoController {
 	    @GetMapping("/{id}")
 	    public ResponseEntity<RequerimientoDTO> getById(@PathVariable Integer id) {
 	        Optional<RequerimientoDTO> dto = service.getRequerimientoById(id);
-	        return dto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+	        return dto.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	    }
 
 	    @PostMapping
 	    public ResponseEntity<RequerimientoDTO> create(@RequestBody RequerimientoDTO dto) {
-	        RequerimientoDTO saved = service.saveDTO(dto);
-	        return ResponseEntity.ok(saved);
+	        return ResponseEntity.ok(service.saveDTO(dto));
 	    }
 
 	    @PutMapping("/{id}")
@@ -52,4 +51,5 @@ public class RequerimientoController {
 	        service.delete(id);
 	        return ResponseEntity.noContent().build();
 	    }
+	  
 }
