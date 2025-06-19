@@ -26,10 +26,6 @@ public class Requerimiento {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cod_estado")
     private Estado codEstado;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cod_cotizacion")
-    private Cotizacion codCotizacion;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cod_usuario")
@@ -67,13 +63,6 @@ public class Requerimiento {
 		this.codEstado = codEstado;
 	}
 
-	public Cotizacion getCodCotizacion() {
-		return codCotizacion;
-	}
-
-	public void setCodCotizacion(Cotizacion codCotizacion) {
-		this.codCotizacion = codCotizacion;
-	}
 
 	public Usuario getCodUsuario() {
 		return codUsuario;
