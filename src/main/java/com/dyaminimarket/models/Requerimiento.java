@@ -1,13 +1,13 @@
 package com.dyaminimarket.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
+import java.util.ArrayList;
+import java.util.List;
+
+
 @Entity
 @Table(name = "requerimiento")
 public class Requerimiento {
@@ -18,10 +18,6 @@ public class Requerimiento {
 
     @Column(name = "fecha")
     private LocalDate fecha;
-    
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cod_detalle_requerimiento")
-    private DetalleRequerimiento codDetalleRequerimiento;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cod_estado")
@@ -30,6 +26,12 @@ public class Requerimiento {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cod_usuario")
     private Usuario codUsuario;
+
+    
+    @OneToMany(mappedBy = "requerimiento", cascade = CascadeType.ALL, orphanRemoval = true)
+   private List<DetalleRequerimiento> detalles = new ArrayList<>();
+
+
 
 	public Integer getId() {
 		return id;
@@ -47,12 +49,13 @@ public class Requerimiento {
 		this.fecha = fecha;
 	}
 
-	public DetalleRequerimiento getCodDetalleRequerimiento() {
-		return codDetalleRequerimiento;
+	public List<DetalleRequerimiento> getDetalles() {
+		return detalles;
 	}
 
-	public void setCodDetalleRequerimiento(DetalleRequerimiento codDetalleRequerimiento) {
-		this.codDetalleRequerimiento = codDetalleRequerimiento;
+
+	public void setDetalles(List<DetalleRequerimiento> detalles) {
+		this.detalles = detalles;
 	}
 
 	public Estado getCodEstado() {
@@ -62,7 +65,6 @@ public class Requerimiento {
 	public void setCodEstado(Estado codEstado) {
 		this.codEstado = codEstado;
 	}
-
 
 	public Usuario getCodUsuario() {
 		return codUsuario;

@@ -26,4 +26,37 @@ public class Proveedor {
     @JoinColumn(name = "cod_tipo")
     private TipoProveedor codTipo;
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getRazonSocial() {
+		return razonSocial;
+	}
+
+	public void setRazonSocial(String razonSocial) {
+		this.razonSocial = razonSocial;
+	}
+
+	public String getDireccion() {
+		return direccion;
+	}
+
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
+	}
+
+	public TipoProveedor getCodTipo() {
+		return codTipo;
+	}
+
+	public void setCodTipo(TipoProveedor codTipo) {
+		this.codTipo = codTipo;
+	}
+    
+    
 }

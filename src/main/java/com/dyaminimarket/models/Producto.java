@@ -1,6 +1,7 @@
 package com.dyaminimarket.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +23,7 @@ public class Producto {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cod_categoria")
+
     private Categoria codCategoria;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,5 +43,84 @@ public class Producto {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cod_proveedor")
     private Proveedor codProveedor;
+    
+    @Column(name = "sku", unique = true, nullable = false, length = 20)
+    @Size(max = 20)
+    @NotBlank
+    private String sku;
+
+
+	public String getSku() {
+		return sku;
+	}
+
+	public void setSku(String sku) {
+		this.sku = sku;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public Categoria getCodCategoria() {
+		return codCategoria;
+	}
+
+	public void setCodCategoria(Categoria codCategoria) {
+		this.codCategoria = codCategoria;
+	}
+
+	public Unidad getCodUnidad() {
+		return codUnidad;
+	}
+
+	public void setCodUnidad(Unidad codUnidad) {
+		this.codUnidad = codUnidad;
+	}
+
+	public Integer getCantidad() {
+		return cantidad;
+	}
+
+	public void setCantidad(Integer cantidad) {
+		this.cantidad = cantidad;
+	}
+
+	public BigDecimal getPrecio() {
+		return precio;
+	}
+
+	public void setPrecio(BigDecimal precio) {
+		this.precio = precio;
+	}
+
+	public Estado getCodEstado() {
+		return codEstado;
+	}
+
+	public void setCodEstado(Estado codEstado) {
+		this.codEstado = codEstado;
+	}
+
+	public Proveedor getCodProveedor() {
+		return codProveedor;
+	}
+
+	public void setCodProveedor(Proveedor codProveedor) {
+		this.codProveedor = codProveedor;
+	}
+    
 
 }

@@ -22,8 +22,10 @@ public class Despacho {
     @JoinColumn(name = "cod_tienda")
     private Tienda codTienda;
 
-    @Column(name = "cod_detalle_despacho")
-    private Integer codDetalleDespacho;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cod_detalle_despacho")
+    private DetalleDespacho codDetalleDespacho;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cod_estado")

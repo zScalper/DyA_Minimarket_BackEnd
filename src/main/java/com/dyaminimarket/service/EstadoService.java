@@ -25,7 +25,9 @@ public class EstadoService {
     }
 
     // 🔹 Obtener un estado por ID en formato DTO
-    public Optional<EstadoDTO> getEstadoById(Integer id) {
+
+    public Optional<EstadoDTO> getById(Integer id) {
+
         return estadoRepository.findById(id).map(this::convertToDTO);
     }
 

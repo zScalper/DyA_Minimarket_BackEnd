@@ -16,8 +16,9 @@ public class Cotizacion {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+
     @JoinColumn(name = "cod_requerimiento")
-    private Requerimiento codRequerimiento;
+    private Requerimiento codRequerimiento; //falta
 
     @Column(name = "fecha")
     private LocalDate fecha;
@@ -36,6 +37,12 @@ public class Cotizacion {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cod_forma_pago")
     private FormaPago codFormaPago;
+
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "cod_detalle_cotizacion", referencedColumnName = "id_detalle_cotizacion")
+    private DetalleCotizacion codDetalleCotizacion;
+
 
 	public Integer getId() {
 		return id;
@@ -92,5 +99,15 @@ public class Cotizacion {
 	public void setCodFormaPago(FormaPago codFormaPago) {
 		this.codFormaPago = codFormaPago;
 	}
+
+	public DetalleCotizacion getCodDetalleCotizacion() {
+		return codDetalleCotizacion;
+	}
+
+	public void setCodDetalleCotizacion(DetalleCotizacion codDetalleCotizacion) {
+		this.codDetalleCotizacion = codDetalleCotizacion;
+	}
+  
+	
 
 }

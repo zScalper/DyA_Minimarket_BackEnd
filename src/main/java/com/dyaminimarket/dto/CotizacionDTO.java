@@ -4,25 +4,26 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
+
+
 @Data
 public class CotizacionDTO {
     private Integer id;
-    private Integer codRequerimiento;  // Guardamos solo el ID en lugar de la entidad completa
+    private RequerimientoDTO codRequerimiento;  // Guardamos solo el ID en lugar de la entidad completa
     private LocalDate fecha;
-    private Integer codEstado;  // Guardamos solo el ID de Estado
+    private  EstadoDTO  codEstado;  // Guardamos solo el ID de Estado
     private LocalDate fechaVencimiento;
-    private Integer codMoneda;  // Guardamos solo el ID de Moneda
-    private Integer codFormaPago;  // Guardamos solo el ID de FormaPago
+    private  DetalleCotizacionDTO detalleCotizacion;
 	public Integer getId() {
 		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Integer getCodRequerimiento() {
+	public RequerimientoDTO getCodRequerimiento() {
 		return codRequerimiento;
 	}
-	public void setCodRequerimiento(Integer codRequerimiento) {
+	public void setCodRequerimiento(RequerimientoDTO codRequerimiento) {
 		this.codRequerimiento = codRequerimiento;
 	}
 	public LocalDate getFecha() {
@@ -31,10 +32,10 @@ public class CotizacionDTO {
 	public void setFecha(LocalDate fecha) {
 		this.fecha = fecha;
 	}
-	public Integer getCodEstado() {
+	public EstadoDTO getCodEstado() {
 		return codEstado;
 	}
-	public void setCodEstado(Integer codEstado) {
+	public void setCodEstado(EstadoDTO codEstado) {
 		this.codEstado = codEstado;
 	}
 	public LocalDate getFechaVencimiento() {
@@ -43,17 +44,15 @@ public class CotizacionDTO {
 	public void setFechaVencimiento(LocalDate fechaVencimiento) {
 		this.fechaVencimiento = fechaVencimiento;
 	}
-	public Integer getCodMoneda() {
-		return codMoneda;
+	public DetalleCotizacionDTO getDetalleCotizacion() {
+		return detalleCotizacion;
 	}
-	public void setCodMoneda(Integer codMoneda) {
-		this.codMoneda = codMoneda;
+	public void setDetalleCotizacion(DetalleCotizacionDTO detalleCotizacion) {
+		this.detalleCotizacion = detalleCotizacion;
 	}
-	public Integer getCodFormaPago() {
-		return codFormaPago;
-	}
-	public void setCodFormaPago(Integer codFormaPago) {
-		this.codFormaPago = codFormaPago;
-	}
+    
+    
+
+	
     
 }

@@ -23,4 +23,29 @@ public class Categoria {
     @Column(name = "detalle_categoria", length = 150)
     private String detalleCategoria;
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getNombreCategoria() {
+		return nombreCategoria;
+	}
+
+	public void setNombreCategoria(String nombreCategoria) {
+		this.nombreCategoria = nombreCategoria;
+	}
+
+	public String getDetalleCategoria() {
+		return detalleCategoria;
+	}
+
+	public void setDetalleCategoria(String detalleCategoria) {
+		this.detalleCategoria = detalleCategoria;
+	}
+
+    
 }
