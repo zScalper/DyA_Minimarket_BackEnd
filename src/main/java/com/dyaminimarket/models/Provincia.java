@@ -22,4 +22,31 @@ public class Provincia {
     @Column(name = "nombre", length = 100)
     private String nombre;
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Departamento getCodDepartamento() {
+		return codDepartamento;
+	}
+
+	public void setCodDepartamento(Departamento codDepartamento) {
+		this.codDepartamento = codDepartamento;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+    
+    
+    
+
 }

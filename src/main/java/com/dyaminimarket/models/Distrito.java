@@ -22,4 +22,30 @@ public class Distrito {
     @Column(name = "nombre", length = 100)
     private String nombre;
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Provincia getCodProvincia() {
+		return codProvincia;
+	}
+
+	public void setCodProvincia(Provincia codProvincia) {
+		this.codProvincia = codProvincia;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+    
+    
 }

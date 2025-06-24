@@ -46,7 +46,12 @@ public class SecurityConfig {
 	        	    .requestMatchers("/detalle-requerimiento/**").permitAll()
 	        	    .requestMatchers("/cotizacion/**").permitAll()
 	        	    .requestMatchers("/requerimientos/**").permitAll()
-
+	        	    .requestMatchers("/provincias/**").permitAll()
+	        	    .requestMatchers("/departamentos/**").permitAll()
+	        	    .requestMatchers("/distritos/**").permitAll()
+	        	    .requestMatchers("/tiendas/**").permitAll()
+	        	    .requestMatchers("/despachos/**").permitAll()
+	        	    .requestMatchers("/detalle-despachos/**").permitAll()
 	        	    // Acceso granular según método y autoridad
 	        	    .requestMatchers(HttpMethod.GET, "/usuarios/**").hasAnyAuthority("ADMINISTRADOR", "LOGISTICA")
 	        	    .requestMatchers(HttpMethod.POST, "/usuarios").hasAuthority("ADMINISTRADOR")
