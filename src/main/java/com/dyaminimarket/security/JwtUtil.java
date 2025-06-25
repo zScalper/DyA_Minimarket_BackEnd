@@ -29,6 +29,7 @@ public class JwtUtil {
     public String generateToken(Usuario usuario) {
         return Jwts.builder()
                 .setSubject(usuario.getEmail())
+                .claim("id", usuario.getId())
                 .claim("rol", usuario.getRol().getNombre()) // Agregar el rol en el token
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))// 1 hora

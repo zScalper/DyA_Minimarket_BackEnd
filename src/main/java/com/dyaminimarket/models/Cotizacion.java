@@ -5,44 +5,35 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "cotizacion")
 public class Cotizacion {
-    @Id
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_cotizacion", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-
-    @JoinColumn(name = "cod_requerimiento")
-    private Requerimiento codRequerimiento; //falta
-
-    @Column(name = "fecha")
+    @Column(name = "fecha", nullable = false)
     private LocalDate fecha;
+
+    @Column(name = "fecha_vencimiento", nullable = false)
+    private LocalDate fechaVencimiento;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cod_estado")
     private Estado codEstado;
 
-    @Column(name = "fecha_vencimiento")
-    private LocalDate fechaVencimiento;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cod_moneda")
-    private Moneda codMoneda;
+    @JoinColumn(name = "cod_requerimiento")
+    private Requerimiento codRequerimiento;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cod_forma_pago")
-    private FormaPago codFormaPago;
-
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "cod_detalle_cotizacion", referencedColumnName = "id_detalle_cotizacion")
-    private DetalleCotizacion codDetalleCotizacion;
-
+    @OneToMany(mappedBy = "cotizacion", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetalleCotizacion> detalles = new ArrayList<>();
 
 	public Integer getId() {
 		return id;
@@ -50,14 +41,6 @@ public class Cotizacion {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Requerimiento getCodRequerimiento() {
-		return codRequerimiento;
-	}
-
-	public void setCodRequerimiento(Requerimiento codRequerimiento) {
-		this.codRequerimiento = codRequerimiento;
 	}
 
 	public LocalDate getFecha() {
@@ -68,14 +51,6 @@ public class Cotizacion {
 		this.fecha = fecha;
 	}
 
-	public Estado getCodEstado() {
-		return codEstado;
-	}
-
-	public void setCodEstado(Estado codEstado) {
-		this.codEstado = codEstado;
-	}
-
 	public LocalDate getFechaVencimiento() {
 		return fechaVencimiento;
 	}
@@ -84,30 +59,30 @@ public class Cotizacion {
 		this.fechaVencimiento = fechaVencimiento;
 	}
 
-	public Moneda getCodMoneda() {
-		return codMoneda;
+	public Estado getCodEstado() {
+		return codEstado;
 	}
 
-	public void setCodMoneda(Moneda codMoneda) {
-		this.codMoneda = codMoneda;
+	public void setCodEstado(Estado codEstado) {
+		this.codEstado = codEstado;
 	}
 
-	public FormaPago getCodFormaPago() {
-		return codFormaPago;
+	public Requerimiento getCodRequerimiento() {
+		return codRequerimiento;
 	}
 
-	public void setCodFormaPago(FormaPago codFormaPago) {
-		this.codFormaPago = codFormaPago;
+	public void setCodRequerimiento(Requerimiento codRequerimiento) {
+		this.codRequerimiento = codRequerimiento;
 	}
 
-	public DetalleCotizacion getCodDetalleCotizacion() {
-		return codDetalleCotizacion;
+	public List<DetalleCotizacion> getDetalles() {
+		return detalles;
 	}
 
-	public void setCodDetalleCotizacion(DetalleCotizacion codDetalleCotizacion) {
-		this.codDetalleCotizacion = codDetalleCotizacion;
+	public void setDetalles(List<DetalleCotizacion> detalles) {
+		this.detalles = detalles;
 	}
-  
+
+    
 	
-
 }

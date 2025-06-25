@@ -22,19 +22,6 @@ import java.util.stream.Collectors;
 @Service
 public class RequerimientoService {
 
-	// Conversion a DTO
-	/*
-	 * public RequerimientoDTO convertToDTO(Requerimiento requerimiento){
-	 * RequerimientoDTO dto = new RequerimientoDTO();
-	 * dto.setFecha(requerimiento.getFecha());
-	 * dto.setCodDetalleRequerimiento(requerimiento.getCodDetalleRequerimiento());
-	 * dto.setCodCotizacion(requerimiento.getCodCotizacion());
-	 * dto.setCodEstado(requerimiento.getCodEstado() != null ?
-	 * requerimiento.getCodEstado().getId() : null);
-	 * dto.setCodUsuario(requerimiento.getCodUsuario() != null ?
-	 * requerimiento.getCodUsuario().getId() : null); return dto; }
-	 */
-
 	@Autowired
 	private RequerimientoRepository repository;
 	@Autowired

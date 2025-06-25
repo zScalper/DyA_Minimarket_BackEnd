@@ -44,7 +44,7 @@ public class SecurityConfig {
 	        	    .requestMatchers("/unidades/**").permitAll()  
 	        	    .requestMatchers("/detalle-cotizacion/**").permitAll()
 	        	    .requestMatchers("/detalle-requerimiento/**").permitAll()
-	        	    .requestMatchers("/cotizacion/**").permitAll()
+	        	    .requestMatchers("/cotizaciones/**").permitAll()
 	        	    .requestMatchers("/requerimientos/**").permitAll()
 	        	    .requestMatchers("/provincias/**").permitAll()
 	        	    .requestMatchers("/departamentos/**").permitAll()
@@ -53,10 +53,10 @@ public class SecurityConfig {
 	        	    .requestMatchers("/despachos/**").permitAll()
 	        	    .requestMatchers("/detalle-despachos/**").permitAll()
 	        	    // Acceso granular según método y autoridad
-	        	    .requestMatchers(HttpMethod.GET, "/usuarios/**").hasAnyAuthority("ADMINISTRADOR", "LOGISTICA")
-	        	    .requestMatchers(HttpMethod.POST, "/usuarios").hasAuthority("ADMINISTRADOR")
-	        	    .requestMatchers(HttpMethod.PUT, "/usuarios/**").hasAuthority("ADMINISTRADOR")
-	        	    .requestMatchers(HttpMethod.DELETE, "/usuarios/**").hasAuthority("ADMINISTRADOR")
+	        	    .requestMatchers(HttpMethod.GET, "/usuarios/**").hasAnyAuthority("Administrador", "Logistica")
+	        	    .requestMatchers(HttpMethod.POST, "/usuarios").hasAuthority("Administrador")
+	        	    .requestMatchers(HttpMethod.PUT, "/usuarios/**").hasAuthority("Administrador")
+	        	    .requestMatchers(HttpMethod.DELETE, "/usuarios/**").hasAuthority("Administrador")
 
 	        	    // Cualquier otro endpoint protegido
 	        	    .anyRequest().authenticated()

@@ -12,89 +12,70 @@ import com.dyaminimarket.dao.FormaPagoRepository;
 import com.dyaminimarket.dao.MonedaRepository;
 import com.dyaminimarket.dao.ProductoRepository;
 import com.dyaminimarket.dto.DetalleCotizacionDTO;
+
 import com.dyaminimarket.models.DetalleCotizacion;
 
 @Service
 public class DetalleCotizacionService {
 
-	 @Autowired private DetalleCotizacionRepository repository;
-	    @Autowired private ProductoRepository productoRepository;
-	    @Autowired private FormaPagoRepository formaPagoRepository;
-	    @Autowired private MonedaRepository monedaRepository;
+	@Autowired
+	private ProductoRepository productoRepository;
+	@Autowired
+	private MonedaRepository monedaRepository;
+	@Autowired
+	private FormaPagoRepository formaPagoRepository;
+	@Autowired
+	private DetalleCotizacionRepository detalleRepository;
+	
+	@Autowired
+	private ProductoService productoService;
+	@Autowired
+	private MonedaService monedaService;
+	@Autowired
+	private FormaPagoService formaPagoService;
 
-	    @Autowired private ProductoService productoService;
-	    @Autowired private FormaPagoService formaPagoService;
-	    @Autowired private MonedaService monedaService;
+	public DetalleCotizacionDTO convertToDTO(DetalleCotizacion entity) {
+		DetalleCotizacionDTO dto = new DetalleCotizacionDTO();
+		dto.setId(entity.getId());
+		dto.setCantidad(entity.getCantidad());
+		dto.setPrecioUnitario(entity.getPrecioUnitario());
 
-	    public List<DetalleCotizacionDTO> getAllDTO() {
-	        return repository.findAll().stream()
-	                .map(this::convertToDTO)
-	                .collect(Collectors.toList());
-	    }
+		if (entity.getCodProducto() != null)
+			dto.setCodProducto(productoService.getProductoById(entity.getCodProducto().getId()).orElse(null));
 
-	    public Optional<DetalleCotizacionDTO> getById(Integer id) {
-	        return repository.findById(id).map(this::convertToDTO);
-	    }
+		if (entity.getCodMoneda() != null)
+			dto.setCodMoneda(monedaService.getMonedaById(entity.getCodMoneda().getId()).orElse(null));
 
-	    public DetalleCotizacionDTO saveDTO(DetalleCotizacionDTO dto) {
-	        DetalleCotizacion entity = convertToEntity(dto);
-	        return convertToDTO(repository.save(entity));
-	    }
+		if (entity.getCodFormaPago() != null)
+			dto.setCodFormaPago(formaPagoService.getFormaPagoById(entity.getCodFormaPago().getId()).orElse(null));
 
-	    public DetalleCotizacionDTO updateDTO(Integer id, DetalleCotizacionDTO dto) {
-	        Optional<DetalleCotizacion> existing = repository.findById(id);
-	        if (!existing.isPresent()) return null;
+		return dto;
+	}
 
-	        DetalleCotizacion dc = existing.get();
-	        dc.setCantidad(dto.getCantidad());
+	public DetalleCotizacion convertToEntity(DetalleCotizacionDTO dto) {
+		DetalleCotizacion entity = new DetalleCotizacion();
+		entity.setId(dto.getId());
+		entity.setCantidad(dto.getCantidad());
+		entity.setPrecioUnitario(dto.getPrecioUnitario());
 
-	        if (dto.getCodProducto() != null)
-	            dc.setCod_producto(productoRepository.findById(dto.getCodProducto().getId()).orElse(null));
+		if (dto.getCodProducto() != null)
+			productoRepository.findById(dto.getCodProducto().getId()).ifPresent(entity::setCodProducto);
 
-	        if (dto.getCodFormaPago() != null)
-	            dc.setCod_FormaPago(formaPagoRepository.findById(dto.getCodFormaPago().getId()).orElse(null));
+		if (dto.getCodMoneda() != null)
+			monedaRepository.findById(dto.getCodMoneda().getId()).ifPresent(entity::setCodMoneda);
 
-	        if (dto.getCodMoneda() != null)
-	            dc.setCod_Moneda(monedaRepository.findById(dto.getCodMoneda().getId()).orElse(null));
+		if (dto.getCodFormaPago() != null)
+			formaPagoRepository.findById(dto.getCodFormaPago().getId()).ifPresent(entity::setCodFormaPago);
 
-	        return convertToDTO(repository.save(dc));
-	    }
+		return entity;
+	}
+	public List<DetalleCotizacionDTO> getAllDTO() {
+        return detalleRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
 
-	    public void delete(Integer id) {
-	        repository.deleteById(id);
-	    }
-
-	    private DetalleCotizacionDTO convertToDTO(DetalleCotizacion dc) {
-	        DetalleCotizacionDTO dto = new DetalleCotizacionDTO();
-	        dto.setIdDetalleCotizacion(dc.getId_detalle_cotizacion());
-	        dto.setCantidad(dc.getCantidad());
-
-	        if (dc.getCod_producto() != null)
-	            dto.setCodProducto(productoService.getProductoById(dc.getCod_producto().getId()).orElse(null));
-
-	        if (dc.getCod_FormaPago() != null)
-	            dto.setCodFormaPago(formaPagoService.getFormaPagoById(dc.getCod_FormaPago().getId()).orElse(null));
-
-	        if (dc.getCod_Moneda() != null)
-	            dto.setCodMoneda(monedaService.getMonedaById(dc.getCod_Moneda().getId()).orElse(null));
-
-	        return dto;
-	    }
-
-	    private DetalleCotizacion convertToEntity(DetalleCotizacionDTO dto) {
-	        DetalleCotizacion entity = new DetalleCotizacion();
-	        entity.setId_detalle_cotizacion(dto.getIdDetalleCotizacion());
-	        entity.setCantidad(dto.getCantidad());
-
-	        if (dto.getCodProducto() != null)
-	            entity.setCod_producto(productoRepository.findById(dto.getCodProducto().getId()).orElse(null));
-
-	        if (dto.getCodFormaPago() != null)
-	            entity.setCod_FormaPago(formaPagoRepository.findById(dto.getCodFormaPago().getId()).orElse(null));
-
-	        if (dto.getCodMoneda() != null)
-	            entity.setCod_Moneda(monedaRepository.findById(dto.getCodMoneda().getId()).orElse(null));
-
-	        return entity;
-	    }
+    public Optional<DetalleCotizacionDTO> getById(Integer id) {
+        return detalleRepository.findById(id).map(this::convertToDTO);
+    }
 }

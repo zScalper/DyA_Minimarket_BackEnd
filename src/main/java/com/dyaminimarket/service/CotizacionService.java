@@ -4,12 +4,13 @@ import com.dyaminimarket.dao.CotizacionRepository;
 
 import com.dyaminimarket.dto.CotizacionDTO;
 
-import com.dyaminimarket.dao.DetalleCotizacionRepository;
 import com.dyaminimarket.dao.EstadoRepository;
 import com.dyaminimarket.dao.RequerimientoRepository;
 import com.dyaminimarket.dto.DetalleCotizacionDTO;
 
 import com.dyaminimarket.models.Cotizacion;
+import com.dyaminimarket.models.DetalleCotizacion;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,104 +23,103 @@ import java.util.stream.Collectors;
 @Service
 public class CotizacionService {
 
-	   @Autowired private CotizacionRepository repository;
-	    @Autowired private RequerimientoRepository requerimientoRepository;
-	    @Autowired private EstadoRepository estadoRepository;
-	    @Autowired private DetalleCotizacionRepository detalleRepository;
+    @Autowired private CotizacionRepository cotizacionRepository;
+    @Autowired private EstadoRepository estadoRepository;
+    @Autowired private RequerimientoRepository requerimientoRepository;
 
-	    @Autowired private RequerimientoService requerimientoService;
-	    @Autowired private EstadoService estadoService;
-	    @Autowired private DetalleCotizacionService detalleService;
+    @Autowired private EstadoService estadoService;
+    @Autowired private RequerimientoService requerimientoService;
+    @Autowired private DetalleCotizacionService detalleService;
 
-	    public List<CotizacionDTO> getAllDTO() {
-	        return repository.findAll().stream()
-	                .map(this::convertToDTO)
-	                .collect(Collectors.toList());
-	    }
+    public List<CotizacionDTO> getAllDTO() {
+        return cotizacionRepository.findAll()
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
 
-	    public Optional<CotizacionDTO> getById(Integer id) {
-	        return repository.findById(id).map(this::convertToDTO);
-	    }
+    public Optional<CotizacionDTO> getById(Integer id) {
+        return cotizacionRepository.findById(id).map(this::convertToDTO);
+    }
 
-	    public CotizacionDTO saveDTO(CotizacionDTO dto) {
-	        Cotizacion entity = convertToEntity(dto);
-	        return convertToDTO(repository.save(entity));
-	    }
+    public CotizacionDTO saveDTO(CotizacionDTO dto) {
+        Cotizacion entity = convertToEntity(dto);
+        entity.getDetalles().forEach(d -> d.setCotizacion(entity));
+        return convertToDTO(cotizacionRepository.save(entity));
+    }
 
-	    public CotizacionDTO updateDTO(Integer id, CotizacionDTO dto) {
-	        Optional<Cotizacion> existing = repository.findById(id);
-	        if (!existing.isPresent()) return null;
+    public CotizacionDTO updateDTO(Integer id, CotizacionDTO dto) {
+        Optional<Cotizacion> existing = cotizacionRepository.findById(id);
+        if (!existing.isPresent()) return null;
 
-	        Cotizacion cot = existing.get();
-	        cot.setFecha(dto.getFecha());
-	        cot.setFechaVencimiento(dto.getFechaVencimiento());
+        Cotizacion entity = existing.get();
+        entity.setFecha(dto.getFecha());
+        entity.setFechaVencimiento(dto.getFechaVencimiento());
 
-	        if (dto.getCodRequerimiento() != null)
-	            cot.setCodRequerimiento(requerimientoRepository.findById(dto.getCodRequerimiento().getId()).orElse(null));
+        if (dto.getCodEstado() != null)
+            entity.setCodEstado(estadoRepository.findById(dto.getCodEstado().getId()).orElse(null));
 
-	        if (dto.getCodEstado() != null)
-	            cot.setCodEstado(estadoRepository.findById(dto.getCodEstado().getId()).orElse(null));
+        if (dto.getCodRequerimiento() != null)
+            entity.setCodRequerimiento(requerimientoRepository.findById(dto.getCodRequerimiento().getId()).orElse(null));
 
-	        if (dto.getDetalleCotizacion() != null) {
-	            Integer idDet = dto.getDetalleCotizacion().getIdDetalleCotizacion();
-	            if (idDet != null) {
-	                cot.setCodDetalleCotizacion(detalleRepository.findById(idDet).orElse(null));
-	            } else {
-	                // Guardar el detalle primero si es nuevo (sin ID)
-	                DetalleCotizacionDTO savedDetalle = detalleService.saveDTO(dto.getDetalleCotizacion());
-	                cot.setCodDetalleCotizacion(detalleRepository.findById(savedDetalle.getIdDetalleCotizacion()).orElse(null));
-	            }
-	        }
+        entity.getDetalles().clear();
 
-	        return convertToDTO(repository.save(cot));
-	    }
+        if (dto.getDetalles() != null) {
+            for (DetalleCotizacionDTO detalleDTO : dto.getDetalles()) {
+                DetalleCotizacion detalle = detalleService.convertToEntity(detalleDTO);
+                detalle.setCotizacion(entity);
+                entity.getDetalles().add(detalle);
+            }
+        }
 
-	    public void delete(Integer id) {
-	        repository.deleteById(id);
-	    }
+        return convertToDTO(cotizacionRepository.save(entity));
+    }
 
-	    private CotizacionDTO convertToDTO(Cotizacion cot) {
-	        CotizacionDTO dto = new CotizacionDTO();
-	        dto.setId(cot.getId());
-	        dto.setFecha(cot.getFecha());
-	        dto.setFechaVencimiento(cot.getFechaVencimiento());
+    public void delete(Integer id) {
+        cotizacionRepository.deleteById(id);
+    }
 
-	        if (cot.getCodRequerimiento() != null)
-	            dto.setCodRequerimiento(requerimientoService.getRequerimientoById(cot.getCodRequerimiento().getId()).orElse(null));
+    public CotizacionDTO convertToDTO(Cotizacion entity) {
+        CotizacionDTO dto = new CotizacionDTO();
+        dto.setId(entity.getId());
+        dto.setFecha(entity.getFecha());
+        dto.setFechaVencimiento(entity.getFechaVencimiento());
 
-	        if (cot.getCodEstado() != null)
-	            dto.setCodEstado(estadoService.getById(cot.getCodEstado().getId()).orElse(null));
+        if (entity.getCodEstado() != null)
+            dto.setCodEstado(estadoService.getById(entity.getCodEstado().getId()).orElse(null));
 
-	        if (cot.getCodDetalleCotizacion() != null)
-	            dto.setDetalleCotizacion(detalleService.getById(cot.getCodDetalleCotizacion().getId_detalle_cotizacion()).orElse(null));
+        if (entity.getCodRequerimiento() != null)
+            dto.setCodRequerimiento(requerimientoService.getRequerimientoById(entity.getCodRequerimiento().getId()).orElse(null));
 
-	        return dto;
-	    }
+        if (entity.getDetalles() != null)
+            dto.setDetalles(entity.getDetalles().stream()
+                    .map(detalleService::convertToDTO)
+                    .collect(Collectors.toList()));
 
-	    private Cotizacion convertToEntity(CotizacionDTO dto) {
-	        Cotizacion cot = new Cotizacion();
-	        cot.setId(dto.getId());
-	        cot.setFecha(dto.getFecha());
-	        cot.setFechaVencimiento(dto.getFechaVencimiento());
+        return dto;
+    }
 
-	        if (dto.getCodRequerimiento() != null)
-	            cot.setCodRequerimiento(requerimientoRepository.findById(dto.getCodRequerimiento().getId()).orElse(null));
+    public Cotizacion convertToEntity(CotizacionDTO dto) {
+        Cotizacion entity = new Cotizacion();
+        entity.setId(dto.getId());
+        entity.setFecha(dto.getFecha());
+        entity.setFechaVencimiento(dto.getFechaVencimiento());
 
-	        if (dto.getCodEstado() != null)
-	            cot.setCodEstado(estadoRepository.findById(dto.getCodEstado().getId()).orElse(null));
+        if (dto.getCodEstado() != null)
+            entity.setCodEstado(estadoRepository.findById(dto.getCodEstado().getId()).orElse(null));
 
-	        if (dto.getDetalleCotizacion() != null) {
-	            Integer idDet = dto.getDetalleCotizacion().getIdDetalleCotizacion();
-	            if (idDet != null) {
-	                cot.setCodDetalleCotizacion(detalleRepository.findById(idDet).orElse(null));
-	            } else {
-	                // Guardar el detalle primero si es nuevo (sin ID)
-	                DetalleCotizacionDTO savedDetalle = detalleService.saveDTO(dto.getDetalleCotizacion());
-	                cot.setCodDetalleCotizacion(detalleRepository.findById(savedDetalle.getIdDetalleCotizacion()).orElse(null));
-	            }
-	        }
+        if (dto.getCodRequerimiento() != null)
+            entity.setCodRequerimiento(requerimientoRepository.findById(dto.getCodRequerimiento().getId()).orElse(null));
 
-	        return cot;
-	    }
+        if (dto.getDetalles() != null) {
+            List<DetalleCotizacion> detalles = dto.getDetalles().stream()
+                    .map(detalleService::convertToEntity)
+                    .peek(d -> d.setCotizacion(entity))
+                    .collect(Collectors.toList());
+            entity.setDetalles(detalles);
+        }
 
+        return entity;
+    }
 }
+

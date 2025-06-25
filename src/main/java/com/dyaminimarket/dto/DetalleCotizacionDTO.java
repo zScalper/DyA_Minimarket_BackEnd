@@ -1,19 +1,21 @@
 package com.dyaminimarket.dto;
 
+import java.math.BigDecimal;
+
 public class DetalleCotizacionDTO {
-
-
-    private Integer idDetalleCotizacion;
+    private Integer id;
     private Integer cantidad;
-    private ProductoDTO codProducto;
-    private FormaPagoDTO codFormaPago;
+    private BigDecimal precioUnitario;
+
     private MonedaDTO codMoneda;
-  
-	public Integer getIdDetalleCotizacion() {
-		return idDetalleCotizacion;
+    private FormaPagoDTO codFormaPago;
+    private ProductoDTO codProducto;
+    
+	public Integer getId() {
+		return id;
 	}
-	public void setIdDetalleCotizacion(Integer idDetalleCotizacion) {
-		this.idDetalleCotizacion = idDetalleCotizacion;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	public Integer getCantidad() {
 		return cantidad;
@@ -21,18 +23,11 @@ public class DetalleCotizacionDTO {
 	public void setCantidad(Integer cantidad) {
 		this.cantidad = cantidad;
 	}
-
-	public ProductoDTO getCodProducto() {
-		return codProducto;
+	public BigDecimal getPrecioUnitario() {
+		return precioUnitario;
 	}
-	public void setCodProducto(ProductoDTO codProducto) {
-		this.codProducto = codProducto;
-	}
-	public FormaPagoDTO getCodFormaPago() {
-		return codFormaPago;
-	}
-	public void setCodFormaPago(FormaPagoDTO codFormaPago) {
-		this.codFormaPago = codFormaPago;
+	public void setPrecioUnitario(BigDecimal precioUnitario) {
+		this.precioUnitario = precioUnitario;
 	}
 	public MonedaDTO getCodMoneda() {
 		return codMoneda;
@@ -40,11 +35,19 @@ public class DetalleCotizacionDTO {
 	public void setCodMoneda(MonedaDTO codMoneda) {
 		this.codMoneda = codMoneda;
 	}
-	
-
+	public FormaPagoDTO getCodFormaPago() {
+		return codFormaPago;
+	}
+	public void setCodFormaPago(FormaPagoDTO codFormaPago) {
+		this.codFormaPago = codFormaPago;
+	}
+	public ProductoDTO getCodProducto() {
+		return codProducto;
+	}
+	public void setCodProducto(ProductoDTO codProducto) {
+		this.codProducto = codProducto;
+	}
     
     
-	
-    
-	
 }
+

@@ -14,43 +14,42 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/cotizacion")
+@RequestMapping("/cotizaciones")
 public class CotizacionController {
 
-	 @Autowired
-	    private CotizacionService service;
+    @Autowired
+    private CotizacionService service;
 
-	    @GetMapping
-	    public ResponseEntity<List<CotizacionDTO>> getAll() {
-	        return ResponseEntity.ok(service.getAllDTO());
-	    }
+    @GetMapping
+    public ResponseEntity<List<CotizacionDTO>> getAll() {
+        return ResponseEntity.ok(service.getAllDTO());
+    }
 
-	    @GetMapping("/{id}")
-	    public ResponseEntity<CotizacionDTO> getById(@PathVariable Integer id) {
-	        Optional<CotizacionDTO> dto = service.getById(id);
-	        return dto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-	    }
+    @GetMapping("/{id}")
+    public ResponseEntity<CotizacionDTO> getById(@PathVariable Integer id) {
+        Optional<CotizacionDTO> dto = service.getById(id);
+        return dto.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
 
-	    @PostMapping
-	    public ResponseEntity<CotizacionDTO> create(@RequestBody CotizacionDTO dto) {
-	        CotizacionDTO saved = service.saveDTO(dto);
-	        return ResponseEntity.ok(saved);
-	    }
+    @PostMapping
+    public ResponseEntity<CotizacionDTO> create(@RequestBody CotizacionDTO dto) {
+        return ResponseEntity.ok(service.saveDTO(dto));
+    }
 
-	    @PutMapping("/{id}")
-	    public ResponseEntity<CotizacionDTO> update(@PathVariable Integer id, @RequestBody CotizacionDTO dto) {
-	        CotizacionDTO updated = service.updateDTO(id, dto);
-	        if (updated == null) return ResponseEntity.notFound().build();
-	        return ResponseEntity.ok(updated);
-	    }
+    @PutMapping("/{id}")
+    public ResponseEntity<CotizacionDTO> update(@PathVariable Integer id, @RequestBody CotizacionDTO dto) {
+        CotizacionDTO updated = service.updateDTO(id, dto);
+        if (updated == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(updated);
+    }
 
-	    @DeleteMapping("/{id}")
-	    public ResponseEntity<Void> delete(@PathVariable Integer id) {
-	        if (!service.getById(id).isPresent()) {
-	            return ResponseEntity.notFound().build();
-	        }
-	        service.delete(id);
-	        return ResponseEntity.noContent().build();
-	    }
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        if (!service.getById(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
+

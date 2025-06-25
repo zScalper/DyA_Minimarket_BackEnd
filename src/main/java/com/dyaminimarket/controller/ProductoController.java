@@ -33,6 +33,12 @@ public class ProductoController {
 	        Optional<ProductoDTO> dto = service.getProductoById(id);
 	        return dto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
 	    }
+	    @GetMapping("/sku/{sku}")
+	    public ResponseEntity<ProductoDTO> obtenerPorSku(@PathVariable String sku) {
+	    	Optional<ProductoDTO> dto = service.getProductoBySku(sku);
+	    	return dto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+	    }
+
 
 	    @PostMapping
 	    public ResponseEntity<ProductoDTO> create(@RequestBody ProductoDTO dto) {
