@@ -26,4 +26,40 @@ public class OrdenCompra {
     @Column(name = "monto_total", precision = 10, scale = 2)
     private BigDecimal montoTotal;
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Cotizacion getCodCotizacion() {
+		return codCotizacion;
+	}
+
+	public void setCodCotizacion(Cotizacion codCotizacion) {
+		this.codCotizacion = codCotizacion;
+	}
+
+	public LocalDate getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(LocalDate fecha) {
+		this.fecha = fecha;
+	}
+
+	public BigDecimal getMontoTotal() {
+		return montoTotal;
+	}
+
+	public void setMontoTotal(BigDecimal montoTotal) {
+		this.montoTotal = montoTotal;
+	}
+
+    
+    
+    
+    
 }

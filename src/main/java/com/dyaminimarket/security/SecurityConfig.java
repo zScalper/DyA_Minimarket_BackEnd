@@ -52,6 +52,7 @@ public class SecurityConfig {
 	        	    .requestMatchers("/tiendas/**").permitAll()
 	        	    .requestMatchers("/despachos/**").permitAll()
 	        	    .requestMatchers("/detalle-despachos/**").permitAll()
+	        	    .requestMatchers("/ordenes-compra/**").permitAll()
 	        	    // Acceso granular según método y autoridad
 	        	    .requestMatchers(HttpMethod.GET, "/usuarios/**").hasAnyAuthority("Administrador", "Logistica")
 	        	    .requestMatchers(HttpMethod.POST, "/usuarios").hasAuthority("Administrador")
