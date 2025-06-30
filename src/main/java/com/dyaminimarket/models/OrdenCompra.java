@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Table(name = "orden_compra")
 public class OrdenCompra {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_orden_compra", nullable = false)
     private Integer id;
 
