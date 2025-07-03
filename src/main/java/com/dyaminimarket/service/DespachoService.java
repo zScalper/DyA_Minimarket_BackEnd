@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dyaminimarket.dao.DespachoRepository;
-import com.dyaminimarket.dao.DetalleDespachoRepository;
 import com.dyaminimarket.dao.EstadoRepository;
 import com.dyaminimarket.dao.TiendaRepository;
 import com.dyaminimarket.dao.UsuarioRepository;

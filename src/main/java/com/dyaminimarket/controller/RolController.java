@@ -1,7 +1,7 @@
 package com.dyaminimarket.controller;
 
 import com.dyaminimarket.dto.RolDTO;
-import com.dyaminimarket.models.Rol;
+
 import com.dyaminimarket.service.RolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/roles")
