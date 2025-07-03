@@ -1,11 +1,7 @@
 package com.dyaminimarket.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "detalle_despacho")
 public class DetalleDespacho {

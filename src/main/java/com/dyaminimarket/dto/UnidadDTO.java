@@ -1,8 +1,5 @@
 package com.dyaminimarket.dto;
 
-import lombok.Data;
-
-@Data
 public class UnidadDTO {
 
 private Integer id;

@@ -1,7 +1,5 @@
 package com.dyaminimarket.dto;
-import lombok.Data;
 
-@Data
 public class FormaPagoDTO {
 	private Integer id;
     private String formaPago;

@@ -31,7 +31,6 @@ public class ProductoService {
 	@Autowired private EstadoRepository   estadoRepository;
 	@Autowired private ProveedorRepository  proveedorRepository;
 	
-	
 	  public List<ProductoDTO> getAllProductos() {
 	        return productoRepository.findAll().stream()
 	                .map(this::convertToDTO)
@@ -124,7 +123,6 @@ public class ProductoService {
 
 	            dto.setCodProveedor(prov);
 	        }
-
 
 	        return dto;
 	    }

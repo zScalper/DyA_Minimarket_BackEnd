@@ -1,14 +1,11 @@
 package com.dyaminimarket.dto;
 
-import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 
-
-@Data
 public class CotizacionDTO {
     private Integer id;
     private LocalDate fecha;

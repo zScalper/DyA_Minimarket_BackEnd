@@ -1,15 +1,12 @@
 package com.dyaminimarket.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "cotizacion")
 public class Cotizacion {
