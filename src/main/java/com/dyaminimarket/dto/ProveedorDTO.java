@@ -3,7 +3,6 @@ package com.dyaminimarket.dto;
 public class ProveedorDTO {
 
 	private Integer id;
-	private String ruc;
 	private String razonSocial;
 	private String direccion;
 	private TipoProveedorDTO codTipo;
@@ -12,12 +11,6 @@ public class ProveedorDTO {
 	}
 	public void setId(Integer id) {
 		this.id = id;
-	}
-	public String getRuc() {
-		return ruc;
-	}
-	public void setRuc(String ruc) {
-		this.ruc = ruc;
 	}
 	public String getRazonSocial() {
 		return razonSocial;

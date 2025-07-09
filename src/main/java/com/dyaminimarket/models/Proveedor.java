@@ -1,21 +1,14 @@
 package com.dyaminimarket.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "proveedor")
 public class Proveedor {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_proveedor", nullable = false)
     private Integer id;
-    
-    @Size(max = 11)
-    @Column(name = "ruc", length = 11, unique = true, nullable = false)
-    @NotBlank
-    private String ruc;
 
     @Size(max = 100)
     @Column(name = "razon_social", length = 100)
@@ -59,14 +52,6 @@ public class Proveedor {
 
 	public void setCodTipo(TipoProveedor codTipo) {
 		this.codTipo = codTipo;
-	}
-
-	public String getRuc() {
-		return ruc;
-	}
-
-	public void setRuc(String ruc) {
-		this.ruc = ruc;
 	}
     
     

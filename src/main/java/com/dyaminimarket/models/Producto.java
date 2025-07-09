@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 @Table(name = "producto")
 public class Producto {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_producto", nullable = false)
     private Integer id;
 
