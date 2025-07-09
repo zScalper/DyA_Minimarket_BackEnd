@@ -8,5 +8,5 @@ import com.dyaminimarket.models.Proveedor;
 @Repository
 public interface ProveedorRepository extends JpaRepository<Proveedor, Integer>{
 
-	
+	boolean existsByRuc(String ruc); // Método para verificar si el RUC ya está registrado
 }

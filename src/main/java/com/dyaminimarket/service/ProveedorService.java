@@ -5,7 +5,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.dyaminimarket.dao.ProveedorRepository;
 import com.dyaminimarket.dao.TipoProveedorRepository;
@@ -37,8 +39,12 @@ public class ProveedorService {
 	    }
 
 	    public ProveedorDTO saveProveedorDTO(ProveedorDTO dto) {
-	        Proveedor proveedor = convertToEntity(dto);
+	    	if (proveedorRepository.existsByRuc(dto.getRuc())) {
+		        throw new ResponseStatusException(HttpStatus.CONFLICT, "El RUC ya está registrado.");
+		    }
+	    	Proveedor proveedor = convertToEntity(dto);
 	        return convertToDTO(proveedorRepository.save(proveedor));
+	        
 	    }
 
 	    public ProveedorDTO updateProveedorDTO(Integer id, ProveedorDTO dto) {
@@ -66,6 +72,7 @@ public class ProveedorService {
 	    private ProveedorDTO convertToDTO(Proveedor proveedor) {
 	        ProveedorDTO dto = new ProveedorDTO();
 	        dto.setId(proveedor.getId());
+	        dto.setRuc(proveedor.getRuc());
 	        dto.setRazonSocial(proveedor.getRazonSocial());
 	        dto.setDireccion(proveedor.getDireccion());
 	        if (proveedor.getCodTipo() != null) {
@@ -83,6 +90,7 @@ public class ProveedorService {
 	    private Proveedor convertToEntity(ProveedorDTO dto) {
 	        Proveedor proveedor = new Proveedor();
 	        proveedor.setId(dto.getId());
+	        proveedor.setRuc(dto.getRuc());
 	        proveedor.setRazonSocial(dto.getRazonSocial());
 	        proveedor.setDireccion(dto.getDireccion());
 
