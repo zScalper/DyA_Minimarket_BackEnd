@@ -1,6 +1,5 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy JAR app to Azure Web App - dya
 
 on:
@@ -11,7 +10,7 @@ on:
 
 env:
   JAVA_VERSION: '21'
-  AZURE_WEBAPP_NAME: 'dya'  # ← Nombre exacto de tu App Service
+  AZURE_WEBAPP_NAME: 'dya'
 
 jobs:
   build:
@@ -34,7 +33,7 @@ jobs:
 
       - name: Rename and move JAR
         run: |
-          mkdir deploy
+          mkdir -p deploy
           cp target/*.jar deploy/app.jar
 
       - name: Upload artifact for deployment job
@@ -70,5 +69,3 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           slot-name: 'Production'
           package: deploy/app.jar
-
-          
