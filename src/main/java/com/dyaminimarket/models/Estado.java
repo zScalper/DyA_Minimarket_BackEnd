@@ -2,6 +2,8 @@ package com.dyaminimarket.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
@@ -11,6 +13,7 @@ import jakarta.validation.constraints.Size;
 @Table(name = "estado")
 public class Estado {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_estado", nullable = false)
     private Integer id;
 
